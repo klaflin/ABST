@@ -1,14 +1,6 @@
 import tester.*;
 import java.util.Comparator;
-/*
- * KL change log:
- *  - I changed the byPrice comparator to match the style of the compareTo methods
- *  - insert method was sending to the wrong side - fixed by changing the sign from < to >. 
- *  - same issue for the present method
- *  - i added a bunch of price/author bsts to use for tests, so we should try to use a mix of all three types 
- *  - added TODO stubs to all the methods that still need to be tested 
- *  - i think we need to re-work sameData and sameTree
- */
+
 // an abstract class to represent a binary search tree
 public abstract class ABST<T> {
   Comparator<T> order;
@@ -96,46 +88,39 @@ class Leaf<T> extends ABST<T> {
   }
 
   // do the two BSTs have the same data and structure?
-  // TODO
   boolean sameTree(ABST<T> other) {
     return other.sameLeaf(this);
   }
 
   // helper for sameTree
-  //TODO
   boolean sameTreeHelper(T data, ABST<T> left, ABST<T> right) {
     return false;
   }
 
   // do the two BSTs have the same data?
-  //TODO
   boolean sameData(ABST<T> other) {
     return other.sameLeaf(this);
   }
 
   // a helper for sameData
   // in this case we are checking to see if a node has the same data as a leaf
-  //TODO
   boolean sameDataHelper(T leftMost, ABST<T> right) {
     return false;
   }
 
   // is the leaf the same as that leaf?
   // is trivially true as leaves have no data
-  //TODO
   boolean sameLeaf(Leaf<T> leaf) {
     return true;
   }
 
   // creates a sorted list of the data in the BST
-  //TODO
   IList<T> buildList() {
     return new MtList<T>();
   }
 }
 
 //represents a node in a binary search tree
-//TODO
 class Node<T> extends ABST<T> {
   T data;
   ABST<T> left;
@@ -193,40 +178,33 @@ class Node<T> extends ABST<T> {
   }
 
   // determines if this tree is the same (data & structure) as the other tree
-  //TODO
   boolean sameTree(ABST<T> other) {
     return other.sameTreeHelper(this.data, this.left, this.right);
   }
 
   // helper for sameTree
-  //TODO
   boolean sameTreeHelper(T data, ABST<T> left, ABST<T> right) {
-    return (this.order.compare(this.data, data) == 0) 
-        && this.left.sameTree(left)
+    return (this.order.compare(this.data, data) == 0) && this.left.sameTree(left)
         && this.right.sameTree(right);
   }
 
   // do the two BSTs have the same set of data?
-  //TODO
   boolean sameData(ABST<T> other) {
     return other.sameDataHelper(this.getLeftMost(), this.getRight());
   }
 
   // helper for sameData
-  //TODO
   boolean sameDataHelper(T leftMost, ABST<T> right) {
     return (this.order.compare(this.getLeftMost(), leftMost) == 0)
         && this.getRight().sameData(right);
   }
 
   // is this node the same as that leaf?
-  //TODO
   boolean sameLeaf(Leaf<T> leaf) {
     return false;
   }
 
   // creates a list of data that is sorted
-  //TODO
   IList<T> buildList() {
     return new ConsList<T>(this.getLeftMost(), this.getRight().buildList());
   }
@@ -242,12 +220,6 @@ class Book {
     this.title = title;
     this.author = author;
     this.price = price;
-  }
-  
-  boolean sameBook(Book other) {
-    return this.title.equals(other.title) 
-        && this.author.equals(other.author)
-        && this.price == other.price;
   }
 }
 
@@ -301,14 +273,12 @@ class ConsList<T> implements IList<T> {
 
 class ExamplesBST {
   // book examples
-  /* books asc by title:
-   * hp2, hp4, hp6, hp5, hp3, hp1 = hp7
+  /*
+   * books asc by title: hp2, hp4, hp6, hp5, hp3, hp1 = hp7
    * 
-   * books asc by author:
-   * hp2, hp3 = hp4 = hp6 = hp7, hp1, hp5
+   * books asc by author: hp2, hp3 = hp4 = hp6 = hp7, hp1, hp5
    * 
-   * books asc by price:
-   * hp3, hp1 = hp6, hp4, hp2 = hp5, hp7
+   * books asc by price: hp3, hp1 = hp6, hp4, hp2 = hp5, hp7
    */
   Book harryPotter1 = new Book("Sorcerer's Stone", "Kellie Laflin", 10);
   Book harryPotter2 = new Book("Chamber of Secrets", "Ellie Adams", 12);
@@ -353,62 +323,67 @@ class ExamplesBST {
       this.leafCompTitles);
 
   // nodes with multiple books:
-  // the result of inserting harryPotter7 into titleHP1 - two books with the same title
+  // the result of inserting harryPotter7 into titleHP1 - two books with the same
+  // title
   Node<Book> sameTitle = new Node<Book>(new BooksByTitle(), this.harryPotter1, this.leafCompTitles,
       this.titleHP7);
 
   // BSTs named:
-  // titleHP + <book number at center node> + left <book numbers to the left> + right
-  // <book numbers to the right>
-  Node<Book> titleHP2right4 = new Node<Book>(new BooksByTitle(), this.harryPotter2, this.leafCompTitles,
-      this.titleHP4);
-  Node<Book> titleHP6left24right5 = new Node<Book>(new BooksByTitle(), this.harryPotter6, this.titleHP2right4,
-      this.titleHP5);
+  // titleHP + <book number at center node> + left <book numbers to the left> +
+  // right<book numbers to the right>
+  Node<Book> titleHP2right4 = new Node<Book>(new BooksByTitle(), this.harryPotter2,
+      this.leafCompTitles, this.titleHP4);
+  Node<Book> titleHP6left24right5 = new Node<Book>(new BooksByTitle(), this.harryPotter6,
+      this.titleHP2right4, this.titleHP5);
   Node<Book> titleHP3left6245right1 = new Node<Book>(new BooksByTitle(), this.harryPotter3,
       this.titleHP6left24right5, this.titleHP1);
 
-  Node<Book> titleHP6left4right5 = new Node<Book>(new BooksByTitle(), this.harryPotter6, this.titleHP4,
-      this.titleHP5);
+  Node<Book> titleHP6left4right5 = new Node<Book>(new BooksByTitle(), this.harryPotter6,
+      this.titleHP4, this.titleHP5);
 
-  // a BST that is the result of removing the left-most node of titleHP3left6245right1
+  // a BST that is the result of removing the left-most node of
+  // titleHP3left6245right1
   Node<Book> alltitlesbutleft = new Node<Book>(new BooksByTitle(), this.harryPotter3,
       this.titleHP6left4right5, this.titleHP1);
 
   // two different valid BST containing the same data with different structures
-  Node<Book> titleHP6right5 = new Node<Book>(new BooksByTitle(), this.harryPotter6, this.leafCompTitles,
-      this.titleHP5);
+  Node<Book> titleHP6right5 = new Node<Book>(new BooksByTitle(), this.harryPotter6,
+      this.leafCompTitles, this.titleHP5);
   Node<Book> titleHP5left6 = new Node<Book>(new BooksByTitle(), this.harryPotter5, this.titleHP6,
       this.leafCompTitles);
 
   // ************
   // examples for using author comparator
   // ************
-  //nodes with single book and two leaves:
-  Node<Book> authorHP1 = new Node<Book>(new BooksByAuthor(), this.harryPotter1, this.leafCompAuthors,
+  // nodes with single book and two leaves:
+  Node<Book> authorHP1 = new Node<Book>(new BooksByAuthor(), this.harryPotter1,
+      this.leafCompAuthors, this.leafCompAuthors);
+  Node<Book> authorHP2 = new Node<Book>(new BooksByAuthor(), this.harryPotter2,
+      this.leafCompAuthors, this.leafCompAuthors);
+  Node<Book> authorHP3 = new Node<Book>(new BooksByAuthor(), this.harryPotter3,
+      this.leafCompAuthors, this.leafCompAuthors);
+  Node<Book> authorHP4 = new Node<Book>(new BooksByAuthor(), this.harryPotter4,
+      this.leafCompAuthors, this.leafCompAuthors);
+  Node<Book> authorHP5 = new Node<Book>(new BooksByAuthor(), this.harryPotter5,
+      this.leafCompAuthors, this.leafCompAuthors);
+  Node<Book> authorHP6 = new Node<Book>(new BooksByAuthor(), this.harryPotter6,
+      this.leafCompAuthors, this.leafCompAuthors);
+  Node<Book> authorHP7 = new Node<Book>(new BooksByAuthor(), this.harryPotter7,
+      this.leafCompAuthors, this.leafCompAuthors);
+
+  // nodes with multiple books:
+  Node<Book> authorHP4left2right5 = new Node<Book>(new BooksByAuthor(), this.harryPotter4,
+      this.authorHP2, this.authorHP5);
+  Node<Book> authorHP5left6 = new Node<Book>(new BooksByAuthor(), this.harryPotter5, this.authorHP6,
       this.leafCompAuthors);
-  Node<Book> authorHP2 = new Node<Book>(new BooksByAuthor(), this.harryPotter2, this.leafCompAuthors,
-      this.leafCompAuthors);
-  Node<Book> authorHP3 = new Node<Book>(new BooksByAuthor(), this.harryPotter3, this.leafCompAuthors,
-      this.leafCompAuthors);
-  Node<Book> authorHP4 = new Node<Book>(new BooksByAuthor(), this.harryPotter4, this.leafCompAuthors,
-      this.leafCompAuthors);
-  Node<Book> authorHP5 = new Node<Book>(new BooksByAuthor(), this.harryPotter5, this.leafCompAuthors,
-      this.leafCompAuthors);
-  Node<Book> authorHP6 = new Node<Book>(new BooksByAuthor(), this.harryPotter6, this.leafCompAuthors,
-      this.leafCompAuthors);
-  Node<Book> authorHP7 = new Node<Book>(new BooksByAuthor(), this.harryPotter7, this.leafCompAuthors,
-      this.leafCompAuthors);
-  
-  //nodes with multiple books:
-  Node<Book> authorHP4left2right5 = new Node<Book>(new BooksByAuthor(), this.harryPotter4, this.authorHP2, this.authorHP5);
-  Node<Book> authorHP5left6 = new Node<Book>(new BooksByAuthor(), this.harryPotter5, this.authorHP6, this.leafCompAuthors);
-  //this is the result of inserting hp6 into authorHP4left2right5 (same Author)
-  Node<Book> authorHP4left2right56 = new Node<Book>(new BooksByAuthor(), this.harryPotter4, this.authorHP2, this.authorHP5left6);
+  // this is the result of inserting hp6 into authorHP4left2right5 (same Author)
+  Node<Book> authorHP4left2right56 = new Node<Book>(new BooksByAuthor(), this.harryPotter4,
+      this.authorHP2, this.authorHP5left6);
 
   // ************
   // examples for using price comparator
   // ************
-  //nodes with single book and two leaves:
+  // nodes with single book and two leaves:
   Node<Book> priceHP1 = new Node<Book>(new BooksByPrice(), this.harryPotter1, this.leafCompPrices,
       this.leafCompPrices);
   Node<Book> priceHP2 = new Node<Book>(new BooksByPrice(), this.harryPotter2, this.leafCompPrices,
@@ -423,84 +398,109 @@ class ExamplesBST {
       this.leafCompPrices);
   Node<Book> priceHP7 = new Node<Book>(new BooksByPrice(), this.harryPotter7, this.leafCompPrices,
       this.leafCompPrices);
-  
-  //nodes with multiple books
-  Node<Book> priceHP1left3right4 = new Node<Book>(new BooksByPrice(), this.harryPotter1, this.priceHP3, this.priceHP4);
-  Node<Book> priceHP4left6 = new Node<Book>(new BooksByPrice(), this.harryPotter4, this.priceHP6, this.leafCompPrices);
-  Node<Book> priceHP3right3 = new Node<Book>(new BooksByPrice(), this.harryPotter3, this.leafCompPrices, this.priceHP3);
-  //the result of inserting hp3 into priceHP1left3right4
-  Node<Book> priceHP1left33right4 = new Node<Book>(new BooksByPrice(), this.harryPotter1, this.priceHP3right3, this.priceHP4);
-  //the result of inserting hp6 into priceHP1left3right4
-  Node<Book> priceHP1left3right46 = new Node<Book>(new BooksByPrice(), this.harryPotter1, this.priceHP3, this.priceHP4left6);
-  
-  Node<Book> priceHP4left6right2 = new Node<Book>(new BooksByPrice(), this.harryPotter4, this.priceHP6, this.priceHP2);
-  Node<Book> priceHP6left3 = new Node<Book>(new BooksByPrice(), this.harryPotter6, this.priceHP3, this.leafCompPrices);
-  //the result of inserting hp3 into priceHP4left6right2 (less than)
-  Node<Book> priceHP4left63right2 = new Node<Book>(new BooksByPrice(), this.harryPotter4, this.priceHP6left3, this.priceHP2);
 
+  // nodes with multiple books
+  Node<Book> priceHP1left3right4 = new Node<Book>(new BooksByPrice(), this.harryPotter1,
+      this.priceHP3, this.priceHP4);
+  Node<Book> priceHP4left6 = new Node<Book>(new BooksByPrice(), this.harryPotter4, this.priceHP6,
+      this.leafCompPrices);
+  Node<Book> priceHP3right3 = new Node<Book>(new BooksByPrice(), this.harryPotter3,
+      this.leafCompPrices, this.priceHP3);
+  // the result of inserting hp3 into priceHP1left3right4
+  Node<Book> priceHP1left33right4 = new Node<Book>(new BooksByPrice(), this.harryPotter1,
+      this.priceHP3right3, this.priceHP4);
+  // the result of inserting hp6 into priceHP1left3right4
+  Node<Book> priceHP1left3right46 = new Node<Book>(new BooksByPrice(), this.harryPotter1,
+      this.priceHP3, this.priceHP4left6);
+
+  Node<Book> priceHP4left6right2 = new Node<Book>(new BooksByPrice(), this.harryPotter4,
+      this.priceHP6, this.priceHP2);
+  Node<Book> priceHP6left3 = new Node<Book>(new BooksByPrice(), this.harryPotter6, this.priceHP3,
+      this.leafCompPrices);
+  // the result of inserting hp3 into priceHP4left6right2 (less than)
+  Node<Book> priceHP4left63right2 = new Node<Book>(new BooksByPrice(), this.harryPotter4,
+      this.priceHP6left3, this.priceHP2);
+
+  // ************
   // list of book examples
+  // ************
   IList<Book> mt = new MtList<Book>();
   IList<Book> hpList65 = new ConsList<Book>(this.harryPotter6,
       new ConsList<Book>(this.harryPotter5, this.mt));
-  
+  IList<Book> hpList642 = new ConsList<Book>(this.harryPotter6,
+      new ConsList<Book>(this.harryPotter4, new ConsList<Book>(this.harryPotter2, this.mt)));
+  IList<Book> hpList2465 = new ConsList<Book>(this.harryPotter2,
+      new ConsList<Book>(this.harryPotter4,
+          new ConsList<Book>(this.harryPotter6, new ConsList<Book>(this.harryPotter5, this.mt))));
+  IList<Book> hpListallbytitle = new ConsList<Book>(this.harryPotter2, new ConsList<Book>(
+      this.harryPotter4, new ConsList<Book>(this.harryPotter6, new ConsList<Book>(this.harryPotter5,
+          new ConsList<Book>(this.harryPotter3, new ConsList<Book>(this.harryPotter1, this.mt))))));
+
   /*
    * TESTS FOR COMPARATOR<BOOK> METHODS
    */
-  //tests for BooksByTitle()
+  // tests for BooksByTitle()
   boolean testByTitle(Tester t) {
     return t.checkExpect(new BooksByTitle().compare(this.harryPotter2, this.harryPotter4), -4)
         && t.checkExpect(new BooksByTitle().compare(this.harryPotter1, this.harryPotter7), 0)
         && t.checkExpect(new BooksByTitle().compare(this.harryPotter1, this.harryPotter2), 16);
   }
-  
-  //tests for BooksByAuthor()
+
+  // tests for BooksByAuthor()
   boolean testByAuthor(Tester t) {
     return t.checkExpect(new BooksByAuthor().compare(this.harryPotter2, this.harryPotter4), -5)
         && t.checkExpect(new BooksByAuthor().compare(this.harryPotter4, this.harryPotter7), 0)
         && t.checkExpect(new BooksByAuthor().compare(this.harryPotter1, this.harryPotter4), 1);
   }
-  
-  //tests for BooksByPrice()
+
+  // tests for BooksByPrice()
   boolean testByPrice(Tester t) {
     return t.checkExpect(new BooksByPrice().compare(this.harryPotter3, this.harryPotter1), -1)
         && t.checkExpect(new BooksByPrice().compare(this.harryPotter1, this.harryPotter6), 0)
         && t.checkExpect(new BooksByPrice().compare(this.harryPotter4, this.harryPotter6), 1);
   }
-  
-  
+
   /*
    * TESTS FOR ABST<BOOK> METHODS
    */
-  //tests for the insert method
+  // tests for the insert method
   boolean testInsert(Tester t) {
     return t.checkExpect(this.titleHP1.insert(this.harryPotter7), this.sameTitle)
-        && t.checkExpect(this.priceHP4left6right2.insert(this.harryPotter3), this.priceHP4left63right2)
-        && t.checkExpect(this.priceHP1left3right4.insert(this.harryPotter3), this.priceHP1left33right4)
-        && t.checkExpect(this.priceHP1left3right4.insert(this.harryPotter6), this.priceHP1left3right46)
-        && t.checkExpect(this.authorHP4left2right5.insert(this.harryPotter6), this.authorHP4left2right56)
+        && t.checkExpect(this.priceHP4left6right2.insert(this.harryPotter3),
+            this.priceHP4left63right2)
+        && t.checkExpect(this.priceHP1left3right4.insert(this.harryPotter3),
+            this.priceHP1left33right4)
+        && t.checkExpect(this.priceHP1left3right4.insert(this.harryPotter6),
+            this.priceHP1left3right46)
+        && t.checkExpect(this.authorHP4left2right5.insert(this.harryPotter6),
+            this.authorHP4left2right56)
         && t.checkExpect(this.leafCompPrices.insert(this.harryPotter1), this.priceHP1);
   }
-  
-  //tests for present method
+
+  // tests for present method
   boolean testPresent(Tester t) {
     return t.checkExpect(this.leafCompAuthors.present(this.harryPotter1), false)
         && t.checkExpect(this.authorHP4left2right5.present(this.harryPotter2), true)
         && t.checkExpect(this.priceHP1left3right46.present(this.harryPotter2), false);
   }
-  
-  //tests for getLeftMost method
+
+  // tests for getLeftMost method
   boolean testGetLeftMost(Tester t) {
     return t.checkExpect(this.titleHP3left6245right1.getLeftMost(), this.harryPotter2)
         && t.checkExpect(this.priceHP1.getLeftMost(), this.harryPotter1)
         && t.checkExpect(this.titleHP2right4.getLeftMost(), this.harryPotter2)
-        && t.checkException(new RuntimeException("No leftmost item of an empty tree"), this.leafCompAuthors, "getLeftMost");
+        && t.checkException(new RuntimeException("No leftmost item of an empty tree"),
+            this.leafCompAuthors, "getLeftMost");
   }
-  
-//tests for getLeftMostHelper method
+
+  // tests for getLeftMostHelper method
   boolean testGetLeftMostHelper(Tester t) {
-    return t.checkExpect(this.titleHP6left24right5.getLeftMostHelper(this.harryPotter3), this.harryPotter2)
-        && t.checkExpect(this.leafCompPrices.getLeftMostHelper(this.harryPotter1), this.harryPotter1)
-        && t.checkExpect(this.priceHP1left33right4.getLeftMostHelper(this.harryPotter7), this.harryPotter3);
+    return t.checkExpect(this.titleHP6left24right5.getLeftMostHelper(this.harryPotter3),
+        this.harryPotter2)
+        && t.checkExpect(this.leafCompPrices.getLeftMostHelper(this.harryPotter1),
+            this.harryPotter1)
+        && t.checkExpect(this.priceHP1left33right4.getLeftMostHelper(this.harryPotter7),
+            this.harryPotter3);
   }
 
   // tests for getRight
@@ -509,49 +509,93 @@ class ExamplesBST {
         && t.checkExpect(this.titleHP7.getRight(), this.leafCompTitles)
         && t.checkExpect(this.titleHP3left6245right1.getRight(), this.alltitlesbutleft)
         && t.checkExpect(this.priceHP1left33right4.getRight(), this.priceHP1left3right4)
-        && t.checkException(new RuntimeException("No right of an empty tree"), this.leafCompAuthors, "getRight");
+        && t.checkException(new RuntimeException("No right of an empty tree"), this.leafCompAuthors,
+            "getRight");
   }
-  
-//tests for getRightHelper
- boolean testGetRightHelper(Tester t) {
-   return t.checkExpect(this.leafCompAuthors.getRightHelper(this.authorHP4left2right5, this.harryPotter1), this.authorHP4left2right5)
-       && t.checkExpect(this.priceHP2.getRightHelper(this.priceHP3, this.harryPotter3), this.priceHP3right3)
-       && t.checkExpect(this.titleHP5left6.getRightHelper(this.leafCompTitles, this.harryPotter3), 
-           new Node<Book>(new BooksByTitle(), this.harryPotter3, this.titleHP5, this.leafCompTitles));
- }
+
+  // tests for getRightHelper
+  boolean testGetRightHelper(Tester t) {
+    return t.checkExpect(
+        this.leafCompAuthors.getRightHelper(this.authorHP4left2right5, this.harryPotter1),
+        this.authorHP4left2right5)
+        && t.checkExpect(this.priceHP2.getRightHelper(this.priceHP3, this.harryPotter3),
+            this.priceHP3right3)
+        && t.checkExpect(this.titleHP5left6.getRightHelper(this.leafCompTitles, this.harryPotter3),
+            new Node<Book>(new BooksByTitle(), this.harryPotter3, this.titleHP5,
+                this.leafCompTitles));
+  }
 
   // tests sameTree
   boolean testSameTree(Tester t) {
     return t.checkExpect(this.leafCompAuthors.sameTree(this.leafCompAuthors), true)
         && t.checkExpect(this.leafCompAuthors.sameTree(this.titleHP1), false)
         && t.checkExpect(this.titleHP3left6245right1.sameTree(this.leafCompAuthors), false)
-        && t.checkExpect(this.titleHP6right5.sameTree(this.titleHP6right5), true);
+        && t.checkExpect(this.titleHP6right5.sameTree(this.titleHP6right5), true)
+        && t.checkExpect(this.titleHP5left6.sameTree(this.titleHP6right5), false)
+        && t.checkExpect(this.priceHP1left3right4.sameTree(this.titleHP6left4right5), false)
+        && t.checkExpect(this.priceHP1left3right4.sameTree(this.priceHP1left3right4), true);
   }
 
-//tests sameData
+  // tests sameTreeHelper
+  boolean testSameTreeHelper(Tester t) {
+    return t
+        .checkExpect(this.titleHP6right5.sameTreeHelper(this.harryPotter6, this.titleHP6right5.left,
+            this.titleHP6right5.right), true)
+        && t.checkExpect(this.authorHP4.sameTreeHelper(this.harryPotter4, this.leafCompAuthors,
+            this.leafCompPrices), true)
+        && t.checkExpect(
+            this.alltitlesbutleft.sameTreeHelper(this.harryPotter1, this.authorHP7, this.authorHP3),
+            false)
+        && t.checkExpect(this.leafCompAuthors.sameTreeHelper(this.harryPotter7,
+            this.leafCompAuthors, this.leafCompAuthors), false)
+        && t.checkExpect(this.leafCompTitles.sameTreeHelper(this.harryPotter2, this.leafCompTitles,
+            this.leafCompTitles), false);
+  }
+
+  // tests sameData
   boolean testSameData(Tester t) {
     return t.checkExpect(this.leafCompAuthors.sameData(this.leafCompAuthors), true)
         && t.checkExpect(this.leafCompAuthors.sameData(this.titleHP1), false)
-        //&& t.checkExpect(this.priceHP3right3.sameData(this.priceHP3), true) //this should be true: same data, just repeated
         && t.checkExpect(this.titleHP3left6245right1.sameData(this.leafCompAuthors), false)
         && t.checkExpect(this.titleHP5left6.sameData(this.titleHP6right5), true)
-        && t.checkExpect(this.titleHP6right5.sameData(this.titleHP6right5), true);
+        && t.checkExpect(this.titleHP6right5.sameData(this.titleHP6right5), true)
+        && t.checkExpect(this.leafCompAuthors.sameData(this.alltitlesbutleft), false);
+  }
+
+  // tests sameDataHelper
+  boolean testSameDataHelper(Tester t) {
+    return t.checkExpect(
+        this.leafCompAuthors.sameDataHelper(this.harryPotter1, this.leafCompAuthors), false)
+        && t.checkExpect(
+            this.titleHP3left6245right1.sameDataHelper(this.harryPotter2, this.alltitlesbutleft),
+            true)
+        && t.checkExpect(this.authorHP1.sameDataHelper(this.harryPotter1, this.leafCompAuthors),
+            true)
+        && t.checkExpect(this.authorHP4.sameDataHelper(this.harryPotter4, this.leafCompPrices),
+            true)
+        && t.checkExpect(this.authorHP5left6.sameDataHelper(this.harryPotter5, this.authorHP6),
+            false)
+        && t.checkExpect(this.titleHP6right5.sameDataHelper(this.harryPotter6, this.titleHP5), true)
+        && t.checkExpect(this.authorHP5left6.sameDataHelper(this.harryPotter6, this.authorHP5),
+            true);
   }
 
   // tests buildList
   boolean testBuildList(Tester t) {
     return t.checkExpect(this.leafCompAuthors.buildList(), this.mt)
         && t.checkExpect(this.titleHP5left6.buildList(), this.hpList65)
-        && t.checkExpect(this.titleHP6right5.buildList(), this.hpList65);
+        && t.checkExpect(this.titleHP6right5.buildList(), this.hpList65)
+        && t.checkExpect(this.priceHP4left6right2.buildList(), this.hpList642)
+        && t.checkExpect(this.authorHP4left2right56.buildList(), this.hpList2465)
+        && t.checkExpect(this.titleHP3left6245right1.buildList(), this.hpListallbytitle);
   }
-  
-  /*
-   * TESTS FOR BOOK METHODS
-   */
-  
-  boolean testSameBook(Tester t) {
-    return t.checkExpect(this.harryPotter1.sameBook(this.harryPotter7), false)
-        && t.checkExpect(this.harryPotter2.sameBook(this.harryPotter2), true);
+
+  // tests sameLeaf
+  boolean testSameLeaf(Tester t) {
+    return t.checkExpect(this.leafCompTitles.sameLeaf(this.leafCompAuthors), true)
+        && t.checkExpect(this.leafCompAuthors.sameLeaf(this.leafCompAuthors), true)
+        && t.checkExpect(this.authorHP1.sameLeaf(this.leafCompPrices), false)
+        && t.checkExpect(this.titleHP3left6245right1.sameLeaf(this.leafCompTitles), false);
   }
 
 }
